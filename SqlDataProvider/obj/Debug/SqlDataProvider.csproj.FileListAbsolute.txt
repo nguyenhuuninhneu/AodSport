@@ -1,0 +1,2 @@
+H:\ProjectC#\DuAn\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.csprojAssemblyReference.cache
+H:\ProjectC#\DuAn\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.csproj.CoreCompileInputs.cache

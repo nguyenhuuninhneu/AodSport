@@ -1,0 +1,2 @@
+H:\ProjectC#\DuAn\AodSport\Bussiness\obj\Debug\Bussiness.csprojAssemblyReference.cache
+H:\ProjectC#\DuAn\AodSport\Bussiness\obj\Debug\Bussiness.csproj.CoreCompileInputs.cache
