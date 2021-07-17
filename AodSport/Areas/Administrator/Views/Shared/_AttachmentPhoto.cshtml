@@ -1,0 +1,212 @@
+﻿@{
+    var obj = Model.GetType();
+    var name = obj.GetProperty("Name").GetValue(Model, null);
+    var Type = obj.GetProperty("Type") == null ? "" : obj.GetProperty("Type").GetValue(Model, null);  
+    var multiple = obj.GetProperty("Multiple").GetValue(Model, null);
+    var value = obj.GetProperty("Value") == null ? "" : obj.GetProperty("Value").GetValue(Model, null);
+    var module = obj.GetProperty("Modules") == null ? "" : obj.GetProperty("Modules").GetValue(Model, null);  
+
+}
+<script type="text/javascript">
+    $.fn.uploadajax = function (iconloading, fn, ischat) {
+        //Upload albumn Images
+        $(this).on('change', function () {
+            $(iconloading).show();
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                fileData.append('ischat', ischat);
+                $.ajax({
+                    url: '/Upload/UploadFiles',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        $(this).val('');
+                        fn(result);
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("Dữ liệu không được hỗ trợ.");
+            }
+        });
+    };
+</script>
+@if (value != null)
+{
+    <input type="hidden" id="@name" name="@name" value="@value" class="fileuploadinput"/>
+}
+else
+{
+    <input type="hidden" id="@name" name="@name"  class="fileuploadinput"/>
+}
+@if (multiple == true)
+{
+    <input type="file" multiple id="btn-upload-ajax-@name" class="btn btn-success btn-flat browser-image hidden" value="Chọn file văn bản">
+}
+else
+{
+    <input type="file" id="btn-upload-ajax-@name" class="btn btn-success btn-flat browser-image hidden" value="Chọn file văn bản">
+}
+<div class="upload-ajax">
+    <a href="javascript:void(0)" type="button" id="Upload" class="btn btn-success btnfile-img" onclick="$('#btn-upload-ajax-@name').click()"><i class="fa fa-plus"></i> Thêm </a>
+    <i class="ion-loading-a loading-ajax-@name" style="display: none;"></i>
+</div>
+<div id="fileupload-@name" class="fileupload"></div>
+<script>
+    $(document).ready(function () {
+        var formatOffice = ["doc", "docx", "xls", "xlsx", "pdf", "txt"];
+        var imageExtention =["png", "jpg", "jpeg", "gif", "bmp"];
+        var name = '@name';
+        var type = '@Type';
+        var arrFiles = [];
+        var strFiles = "";
+
+        //Bind 2 Edit
+        if ($("#" + name).val() != "") {
+            arrFiles = $("#" + name).val().split("|");
+            for (var i = 0; i < arrFiles.length; i++) {
+                var item = arrFiles[i].split('.');
+                var lastItem = item[item.length - 1];
+                lastItem = lastItem.toLowerCase();
+                var fileOffice = $.inArray(lastItem, formatOffice);
+                var index = $.inArray(lastItem, imageExtention);
+                if (type === "FileImg") {
+                    strFiles += '<div class="imgfile">';
+                    strFiles += '<img src="' + arrFiles[i] + '" />';
+                    strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('"+ name +"','" + arrFiles[i] + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                    strFiles += '</div>';
+                } else if (index >= 0)
+                {
+                    strFiles += '<div class="imgfile">';
+                    strFiles += '<img src="' + arrFiles[i] + '" />';
+                    strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('"+ name +"','" + arrFiles[i] + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                    strFiles += '</div>';
+                }
+                else if (fileOffice>0)
+                {
+                    strFiles += '<p class="completed" id="f' + i + '"><a href="' + arrFiles[i] + '"><span class="fileName">' + arrFiles[i].split('/')[arrFiles[i].split('/').length - 1].substring(33).replace(/-/g, ' ') +" "+'|'+'</span></a><a href="/Home/ViewFile?linkdown=' + arrFiles[i] + '" target="_blank" style="margin-left: 5px; color: #337ab7"><i class="fa fa-search"></i> Xem </a>';
+                    strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('" + name + "','" + arrFiles[i] + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                } else
+                {
+                    strFiles += '<p class="completed" id="f' + i + '"><span class="fileName">' + arrFiles[i].split('/')[arrFiles[i].split('/').length - 1].substring(33) + '</span>';
+                    strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('" + arrFiles[i] + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                }
+            }
+            $("#fileupload-" + name).html(strFiles);
+        }
+        $("#btn-upload-ajax-" + name).uploadajax(".loading-ajax-" + name, function (res) {
+            if (res.status == true) {
+                strFiles = $("#fileupload-" + name).html();
+                if ($("#" + name).val() != "" && "@multiple" == "True") {
+                    arrFiles = $("#" + name).val().split("|");
+                }
+                else
+                {
+                    arrFiles = [];
+                    strFiles = "";
+                }
+                for (var i = 0; i < res.files.length; i++) {
+                    var extention = res.files[i].FileNameOriginal;
+                    var item = extention.split('.');
+                    var lastItem = item[item.length - 1];
+                    var fileOffice = $.inArray(lastItem,formatOffice);
+                    lastItem = lastItem.toLowerCase();
+                    var index = $.inArray(lastItem, imageExtention);
+                    arrFiles.push(res.files[i].FileName);
+
+                    if (type === "FileImg") {
+                        strFiles += '<div class="imgfile">';
+                        strFiles += '<img src="' + res.files[i].FileName + '" />';
+                        strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('" + name + "','" + arrFiles[i] + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                        strFiles += '</div>';
+                    } else if (type === "ImageGallery") {
+                        //Chỉ dùng khi đúng cấu trúc
+                        strFiles = '<tr><td><img src="' + res.files[i].FileName + '" class="w150px form" alt=""></td><td><input type="text" class="form-control" value="" name="Name"/></td><td><textarea rows="3" class="form-control w400px" name="Description"></textarea></td><td><input type="number" class="form-control text-center" min="0" value="0" name="Ordering" /></td><td class="wspn text-center"><a href="javascript://" tite="Xóa file" class="btn btn-sm btn-outline-danger" onclick=\'$(this).parents("tr").remove();removeFile("' + name + '","' + arrFiles[i] + '")\'><i class="icon-trash"></i></a></td></tr>';
+                        $("#gridDataListAdd table tbody").append(strFiles);
+                    }
+                    else if (index>=0) {
+                        strFiles += '<div class="imgfile">';
+                        strFiles += '<img src="' + res.files[i].FileName + '" />';
+                        strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('" + name + "','" + arrFiles[i] + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                        strFiles += '</div>';
+                    }
+                    else if (fileOffice>0)
+                    {
+                        strFiles += '<p class="completed" id="f' + i + '"><a href="' + res.files[i].FileName + '"><span class="fileName">' + res.files[i].FileNameOriginal +" "+'|'+'</span></a><a href="/Home/ViewFile?linkdown=' + res.files[i].FileName + '" target="_blank" style="margin-left: 5px; color: #337ab7"><i class="fa fa-search"></i> Xem </a>';
+
+                        strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('" + name + "','" + res.files[i].FileName + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                    } else
+                    {
+                        strFiles += '<p class="completed" id="f' + i + '"><span class="fileName">' + res.files[i].FileNameOriginal + '</span>';
+                        strFiles += "<a title='Xóa file' class='clsclick' onclick=\"$(this).parent().remove();removeFile('" + res.files[i].FileName + "')\"><i class='fa fa-times removefile' style='margin-left:10px;color:red;cursor: pointer;line-height:20px;'></i></a></p>";
+                    } 
+                }
+                $("#" + name).val(arrFiles.join("|"));
+                if (type !== "ImageGallery") {
+                    $("#fileupload-" + name).html(strFiles);
+                }
+                toastr.success(res.msg);
+            } else {
+                toastr.error(res.msg);
+            }
+            $(".loading-ajax-" + name).hide();
+        });
+    });
+    var removeFile = function (name,filename) {
+        var arrFile = $("#" + name).val().split("|");
+        arrFile = jQuery.grep(arrFile, function (a) {
+            return a != filename;
+        });
+        var strFile = arrFile.join('|');
+        $("#" + name).val(strFile);
+    }
+
+</script>
+<style>
+    .browser-image{ display: none;}
+     .fileupload {
+         margin-top: 3px;
+         width: 100%;
+     }
+    .completed {
+        padding: 5px;
+        background: rgba(221, 221, 221, 0.61);
+        box-shadow: 1px 1px #ccc;
+        margin-bottom: 2px;
+        position: relative;
+    }
+    .imgfile{width: calc((100% - 30px) / 4); float: left; margin-right: 15px; position: relative;}
+    .imgfile:nth-child(4n) {margin-right: 0}
+    .imgfile:nth-child(4n + 1) {clear: both}
+    .imgfile img {width: 100%}
+    .imgfile .clsclick { position: absolute; bottom: 10px; right: -20px; z-index: 2}
+    .btnfile-img{
+        background: #28a745 !important;
+        border: #28a745 !important;
+        outline: none !important;
+        border-radius: 0.25rem !important;
+        -webkit-appearance: none !important;
+    }
+    .btnfile-img:hover {
+        background: #1e7e34 !important;
+        border: #1e7e30 !important;
+    }
+    .removefile {
+        position: absolute;
+        right: 10px; font-size: 25px;
+    }
+</style>

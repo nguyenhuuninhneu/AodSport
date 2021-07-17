@@ -1,0 +1,18 @@
+﻿ 
+
+@media (max-width:1199px){
+    .navbar-fixed-top .navbar-brand {padding: 15px 0}
+    .navbar-fixed-top .navbar-brand img { width: 85px}
+}
+
+@media (max-width:991px){ 
+     
+}
+
+@media (max-width:767px){ 
+    
+}
+
+@media (max-width:479px){ 
+    
+}    

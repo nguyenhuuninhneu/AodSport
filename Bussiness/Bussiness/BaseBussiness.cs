@@ -12,7 +12,7 @@ namespace Bussiness
 		protected Sql_DbObject db;
 		public BaseBussiness()
 		{
-			this.db = new Sql_DbObject("AppConfig", "conString");
+			this.db = new Sql_DbObject("WebConfig", "AodSportConnectionString");
 		}
 		public DataTable GetPage(string queryStr, string queryWhere, int pageCurrent, int pageSize, string fdShow, string fdOreder, string fdKey, ref int total)
 		{

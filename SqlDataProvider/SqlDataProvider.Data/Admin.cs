@@ -59,12 +59,12 @@ namespace SqlDataProvider.Data
 			get;
 			set;
 		}
-		public int? CreateById
+		public int CreateById
 		{
 			get;
 			set;
 		}
-		public int? ModifiedId
+		public int ModifiedId
 		{
 			get;
 			set;

@@ -1,0 +1,60 @@
+﻿@using System.Web.Script.Serialization
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewBag.Title</title>
+
+    <!-- #FAVICONS -->
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon">
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/theme")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery") 
+    
+</head>
+<body class="theme-blue">
+    <div id="wrapper">
+        <!--Khối fix trên-->
+        <nav id="header" class="navbar navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-btn">
+                    <button type="button"><i></i></button>
+                </div>
+                <div class="navbar-brand">
+                    <a href="/">
+                        @*<img src="~/Assets/custom/icon/vlogo.png" alt=""/>*@
+                        <span class="slogan">HỆ THỐNG CƠ SỞ DỮ LIỆU VỀ SINH VIÊN TỐT NGHIỆP XUẤT SẮC, CÁN BỘ KHOA HỌC TRẺ</span>
+                    </a>
+                </div> 
+            </div>
+        </nav> 
+        
+        @*@{Html.RenderAction("MenuMain","Home");}*@ 
+        
+        <div id="flexBody" class="flex">  
+            <div id="main-content" class="scrollJs">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+            <div class="cb"></div>
+        </div>
+    </div>
+    <div class="modal fade" id="responsive" @*tabindex="-1"*@ aria-hidden="true"></div>
+<div class="modal fade" id="full" @*tabindex="-1"*@ @*role="dialog"*@ aria-hidden="true"></div> 
+<div class="modal fade" id="responsive2" aria-hidden="true"></div> 
+<div id="fixed-scrollbar"><div></div></div>
+@Scripts.Render("~/Scripts/theme")
+        @Scripts.Render("~/bundles/bootstrap") 
+    @Scripts.Render("~/Scripts/common") 
+@RenderSection("scripts", required: false) 
+    
+</body>
+</html>

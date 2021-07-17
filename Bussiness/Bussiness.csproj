@@ -50,7 +50,6 @@
     <Compile Include="Bussiness\BaseBussiness.cs" />
     <Compile Include="Bussiness\AdminBussiness.cs" />
     <Compile Include="Bussiness\LanguageMgr.cs" />
-    <Compile Include="Bussiness\UserInfoBussiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

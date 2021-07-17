@@ -1,0 +1,200 @@
+﻿@model LoginViewModel
+@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <title>Đăng nhập tài khoản</title>
+    <link rel="icon" href="~/Assets/Icon/favicon.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="~/assets/vendor/parsleyjs/css/parsley.css">
+    <link href="~/assets/custom/font/font.css" rel="stylesheet" />
+    @Styles.Render("~/Css/Form")
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="~/assets/css/main.css">
+    <link rel="stylesheet" href="~/assets/css/color_skins.css">
+
+    <!--CSS custom-->
+    <link href="~/assets/custom/css/Common.css" rel="stylesheet" />
+
+    <!--CSS Responsive-->
+    <link href="~/assets/custom/css/css_rwd.css" rel="stylesheet" />
+
+</head>
+
+<body class="theme-blue">
+    
+    <!-- WRAPPER -->
+    <div id="wrapper">
+        <div class="vertical-align-wrap">
+            <div class="vertical-align-middle auth-main">
+                <div class="auth-box">
+                    <a href="/" class="top db">  
+                        <img src="~/Assets/custom/icon/quochuy.png" />
+                        <p>
+                            <span>HỆ THỐNG CƠ SỞ DỮ LIỆU VỀ</span>
+                            <span>SINH VIÊN TỐT NGHIỆP XUẤT SẮC, CÁN BỘ KHOA HỌC TRẺ</span>
+                        </p>
+                    </a>
+                    <div class="card">
+                        <div class="header title_login">
+                            <p class="lead">Đăng nhập tài khoản</p>
+                        </div>
+                        <div class="body">
+                            @using (Html.BeginForm("Login", "Login", new { ReturnUrl = ViewBag.ReturnUrl, area = "Administrator" }, FormMethod.Post, new { @class = "form-horizontal form-auth-small", role = "form", id = "basic-form" ,@onsubmit="SubmitForm()"}))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="errorcaptcha text-danger" hidden="hidden">
+                                    <ul>
+                                        <li>Kiểm tra lại mã captcha.</li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label for="signin-email" class="control-label sr-only">Tài khoản</label>
+                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", required = string.Empty})
+                                </div>
+                                <div class="form-group">
+                                    @*toi da 56 ky tu*@
+                                    <label for="signin-email" class="control-label sr-only">Mật khẩu</label>
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", required = string.Empty, data_parsley_maxlength = "56" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input id="txtimgcode" name="txtimgcode" class="form-control" placeholder="Mã bảo mật"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <img class="imgcapcha" id="myimg" src="~/CImage.aspx" onclick="recapcha();"/>
+                                            <a href="javascript://" title="Đổi mã code"><img id="imgChange" src="~/Content/recapcha.png" onclick="recapcha()" /></a>
+                                        </div>
+                                        <div class="cb"></div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Đăng nhập</button>
+
+                                    }
+                                </div>
+                    </div>
+                    @*<div class="info">
+                        <div class="footer-col text-center">
+                            <div><b>Vụ Công tác thanh niên - Bộ Nội vụ</b></div>
+                            <div>Trụ sở tòa soạn: Số 8 Tôn Thất Thuyết, Cầu Giấy, Hà Nội</div>
+                            <div>
+                                @if (!String.IsNullOrEmpty(emaillogin))
+                                {
+                                    <span>Email:</span>
+                                    <a href="javascript://" style="display: inline-block" title="@Html.Raw(emaillogin)">@Html.Raw(emaillogin)</a>
+                                }
+                                @if (!String.IsNullOrEmpty(dienthoailogin))
+                                {
+                                    <span> * Điện thoại: </span>
+                                    <a href="javascript://" style="display: inline-block" title="@Html.Raw(dienthoailogin)">@Html.Raw(dienthoailogin)</a>
+                                }
+                                @if (!String.IsNullOrEmpty(hotlinelogin))
+                                {
+                                    <span> * Hotline: </span>
+                                    <a href="javascript://" style="display: inline-block" title="@Html.Raw(hotlinelogin)">@Html.Raw(hotlinelogin)</a>
+                                }  
+                            </div>
+                        </div> 
+                        @if (!String.IsNullOrEmpty(skypelogin))
+                        {
+                            <a href="skype:@skypelogin" title="skypelogin" class="skype"> 
+                                <img src="~/Assets/custom/icon/skype.png" />
+                            </a>
+                        } 
+                        <a href="http://vietesoft.com/" title="" class="powerby" target="_blank">  
+                            <img src="~/Assets/custom/icon/powerby.png" />
+                        </a>
+                        <div class="cb"></div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END WRAPPER -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/Form")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/assets/bundles/libscripts.bundle.js"></script>
+    <script src="~/assets/bundles/vendorscripts.bundle.js"></script>
+    <script src="~/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+    <script src="~/assets/vendor/parsleyjs/js/parsley.min.js"></script>
+    <script src="~/assets/bundles/mainscripts.bundle.js"></script>
+    <script src="~/assets/js/index.js"></script>
+    <script>
+        $(function () {
+            $('#basic-form').parsley();
+        });
+        $("#txtimgcode").blur(function () {
+            debugger;
+            var txtimgCode = $("#txtimgcode").val();
+            if (txtimgCode == "") {
+                $(".errorcaptcha").attr("hidden", "hidden");
+            }
+            $.ajax({
+                url: "/Account/CheckCapCha",
+                type: "get",
+                dataType: "json",
+                data: { txtimgCode: txtimgCode ,code: "true"},
+                success: function (res) {
+                    if (!res.isSuccess) {
+                        //$(".errorcaptcha").removeAttr("hidden");
+                        $("#txtimgcode").addClass("parsley-error");
+                        return false;
+                    }
+                    else {
+                        $("#txtimgcode").removeClass("parsley-error");
+                        $("#txtimgcode").addClass("parsley-success");
+                        $(".errorcaptcha").attr("hidden", "hidden");
+                    }
+                }
+            });
+        });
+        //function SubmitForm() {
+        //    debugger;
+        //    var txtimgCode = $("#txtimgcode").val();
+        //    $.ajax({
+        //        url: "/Account/CheckCapCha",
+        //        type: "get",
+        //        dataType: "json",
+        //        data: { txtimgCode: txtimgCode },
+        //        success: function (res) {
+        //            if (res.isSuccess==false) {
+        //                $(".errorcaptcha").removeAttr("hidden");
+        //                $("#txtimgcode").addClass("parsley-error");
+        //                return false;
+        //            }
+        //            else {
+        //                $("#txtimgcode").removeClass("parsley-error");
+        //                $("#txtimgcode").addClass("parsley-success");
+        //                $(".errorcaptcha").attr("hidden", "hidden");
+        //            }
+        //        }
+        //    });
+        //}
+    </script>
+</body>
+</html>
+
+<script>
+    function recapcha() {
+        var myimg = document.getElementById('myimg');
+        myimg.style.display = "";
+        myimg.src = '/CImage.aspx?value=' + Math.random();
+    }
+</script>

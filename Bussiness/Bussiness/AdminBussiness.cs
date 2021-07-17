@@ -9,13 +9,13 @@ namespace Bussiness
 {
 	public class AdminBussiness : BaseBussiness
 	{
-		public Admin[] GetAll()
+		public List<Admin> GetAll()
 		{
 			List<Admin> list = new List<Admin>();
 			SqlDataReader sqlDataReader = null;
 			try
 			{
-				this.db.GetReader(ref sqlDataReader, "SP_Active_All");
+				this.db.GetReader(ref sqlDataReader, "SP_Admin_GetAll");
 				while (sqlDataReader.Read())
 				{
 					list.Add(this.ReaderToModel(sqlDataReader));
@@ -35,7 +35,7 @@ namespace Bussiness
 					sqlDataReader.Close();
 				}
 			}
-			return list.ToArray();
+			return list;
 		}
         public Admin[] GetByPage(int page, int size, ref int total, int order, string name, int consortiaID, int level, int openApply)
         {
@@ -311,9 +311,9 @@ namespace Bussiness
 			model.ModifiedDate = string.IsNullOrEmpty(reader["ModifiedDate"].ToString()) ? DateTime.Now
 					 : (DateTime)reader["ModifiedDate"];
 
-			model.CreateById = reader["CreateById"] == null ? 0 :  (int)reader["CreateById"];
-			model.ModifiedId = reader["ModifiedId"] == null ? 0 : (int)reader["ModifiedId"];
-			model.IsActive = (bool)reader["IsActive"];
+            model.CreateById = (reader["CreateById"] != null) ? 0 : (int)reader["CreateById"];
+            model.ModifiedId = (reader["ModifiedId"] != null) ? 0 : (int)reader["ModifiedId"];
+            model.IsActive = (bool)reader["IsActive"];
 			return model;
 		}
 	}

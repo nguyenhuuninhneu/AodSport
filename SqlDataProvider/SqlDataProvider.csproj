@@ -47,7 +47,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlDataProvider.BaseClass\ApplicationLog.cs" />
     <Compile Include="SqlDataProvider.BaseClass\Sql_DbObject.cs" />
+    <Compile Include="SqlDataProvider.Data\User.cs" />
     <Compile Include="SqlDataProvider.Data\Admin.cs" />
+    <Compile Include="SqlDataProvider.Data\CategoryUser.cs" />
+    <Compile Include="SqlDataProvider.Data\Confront.cs" />
+    <Compile Include="SqlDataProvider.Data\ConfrontMatch.cs" />
+    <Compile Include="SqlDataProvider.Data\ConfrontMatchList.cs" />
+    <Compile Include="SqlDataProvider.Data\ConfrontMatchListDetail.cs" />
+    <Compile Include="SqlDataProvider.Data\ConfrontMatchUser.cs" />
+    <Compile Include="SqlDataProvider.Data\ConfrontTeam.cs" />
+    <Compile Include="SqlDataProvider.Data\MatchType.cs" />
+    <Compile Include="SqlDataProvider.Data\Menu.cs" />
+    <Compile Include="SqlDataProvider.Data\Rank.cs" />
+    <Compile Include="SqlDataProvider.Data\Team.cs" />
+    <Compile Include="SqlDataProvider.Data\TeamConfrontMatchListDetail.cs" />
+    <Compile Include="SqlDataProvider.Data\TeamUser.cs" />
+    <Compile Include="SqlDataProvider.Data\Category.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
