@@ -1,2 +1,8 @@
 H:\ProjectC#\DuAn\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.csprojAssemblyReference.cache
 H:\ProjectC#\DuAn\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.csproj.CoreCompileInputs.cache
+H:\ProjectC#\DuAnUseGit\AodSport\SqlDataProvider\bin\Debug\SqlDataProvider.dll
+H:\ProjectC#\DuAnUseGit\AodSport\SqlDataProvider\bin\Debug\SqlDataProvider.pdb
+H:\ProjectC#\DuAnUseGit\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.csprojAssemblyReference.cache
+H:\ProjectC#\DuAnUseGit\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.csproj.CoreCompileInputs.cache
+H:\ProjectC#\DuAnUseGit\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.dll
+H:\ProjectC#\DuAnUseGit\AodSport\SqlDataProvider\obj\Debug\SqlDataProvider.pdb

@@ -1,0 +1,89 @@
+﻿<nav class="navbar navbar-inverse vho_menu" role="navigation" id="vho_top">
+    <div class="namesoftv">
+        <a href="/">
+            <img src="~/Assets/img/vlogo.png" class="vlogo hidden-xs" />
+            <img src="~/Assets/img/vlogotext.png" class="vlogotext hidden-xs" />
+            <img src="~/Assets/img/ipm_logom.png" class="vlogom visible-xs" />
+        </a>
+    </div>
+    <div class="wrapmenu">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menutop-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="menutop-collapse">
+            <ul class="nav navbar-nav custom-menu-notifi hidden-xs" id="vho_m_icon">
+
+                <li>
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                        <i class="vho_menu_icon iconconfig"></i>
+                    </a>
+                    <ul class="dropdown-menu custom-scroll custom-notification ulajth" role="menu">
+
+                        <li class="User_View">
+                            <a href="~/Users?moduleId=22">Người dùng</a>
+                        </li>
+
+                        <li>
+                            <a href="~/dmdoituong?moduleId=16">Danh mục hệ thống</a>
+                        </li>
+
+                        <li>
+                            <a href="~/dmphucap?moduleId=2031">Cấu hình lương</a>
+                        </li>
+
+                        <li>
+                            <a href="~/Modules?moduleId=21">Cấu hình hệ thống</a>
+                        </li>
+
+                        <li>
+                            <a href="~/Unit?moduleId=2043">Cấu hình đơn vị</a>
+                        </li>
+
+                    </ul>
+                </li>
+                
+
+                <li>
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                        <i class="fa fa-user fa_topright"></i>
+                    </a>
+                    <ul class="dropdown-menu custom-scroll custom-notification ulajth" role="menu">
+                        <li>
+                            <a href="/Account/Logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Đăng xuất</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav custom-menu-notifi" id="menutop">
+                <li class="hidden-xs">
+                    <span class="vlinemenu visible-xs"></span>
+                </li>
+                <li class="">
+                    <a title="Hồ sơ cán bộ" href="/HoSo">
+                        <span class="menu-item-parent">Hồ sơ cán bộ </span>
+                    </a>
+                </li>
+                <li class="hidden-xs">
+                    <span class="vlinemenu visible-xs"></span>
+                </li>
+                <li class="visible-xs">
+                    <a href="/Account/Logout">
+                        <span class="menu-item-parent">Đăng xuất</span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>

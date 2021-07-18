@@ -1,4 +1,4 @@
-using DAL;
+﻿using DAL;
 using SqlDataProvider.Data;
 using System;
 using System.Collections;
@@ -132,7 +132,7 @@ namespace Bussiness
                         break;
                 }
                 sOrder += ",ConsortiaID ";
-                DataTable dt = base.GetPage("V_Consortia", sWhere, page, size, "*", sOrder, "ConsortiaID", ref total);
+                DataTable dt = base.GetPage("V_Admin", sWhere, page, size, "*", sOrder, "Id", ref total);
                 foreach (DataRow dr in dt.Rows)
                 {
                     models.Add(new Admin
@@ -169,10 +169,10 @@ namespace Bussiness
 			{
 				SqlParameter[] array = new SqlParameter[]
 				{
-					new SqlParameter("@ID", SqlDbType.Int, 4)
+					new SqlParameter("@Id", SqlDbType.Int, 4)
 				};
 				array[0].Value = id;
-				this.db.GetReader(ref sqlDataReader, "SP_Active_Single", array);
+				this.db.GetReader(ref sqlDataReader, "SP_Admin_GetById", array);
 				if (sqlDataReader.Read())
 				{
 					return this.ReaderToModel(sqlDataReader);
@@ -194,6 +194,38 @@ namespace Bussiness
 			}
 			return null;
 		}
+        public Admin GetByUserName(string username)
+        {
+            SqlDataReader sqlDataReader = null;
+            try
+            {
+                SqlParameter[] array = new SqlParameter[]
+                {
+                    new SqlParameter("@UserName", username)
+                };
+                this.db.GetReader(ref sqlDataReader, "SP_Admin_GetByUserName", array);
+                if (sqlDataReader.Read())
+                {
+                    return this.ReaderToModel(sqlDataReader);
+                }
+            }
+            catch (Exception exception)
+            {
+                if (BaseBussiness.log.IsErrorEnabled)
+                {
+                    BaseBussiness.log.Error("Init", exception);
+                }
+            }
+            finally
+            {
+                if (sqlDataReader != null && !sqlDataReader.IsClosed)
+                {
+                    sqlDataReader.Close();
+                }
+            }
+            return null;
+        }
+
         public bool Add(Admin model, ref string msg)
         {
             bool result = false;
@@ -216,8 +248,8 @@ namespace Bussiness
                 para[12] = new SqlParameter("@IsActive", model.IsActive);
                 para[13] = new SqlParameter("@Result", SqlDbType.Int);
                 para[13].Direction = ParameterDirection.ReturnValue;
-                result = this.db.RunProcedure("SP_Consortia_Add", para);
-                int returnValue = (int)para[19].Value;
+                result = this.db.RunProcedure("SP_Admin_Add", para);
+                int returnValue = (int)para[13].Value;
                 result = (returnValue == 0);
                 if (result)
                 {
@@ -233,6 +265,7 @@ namespace Bussiness
             }
             return result;
         }
+
         public bool Update(Admin model, ref string msg)
         {
             bool result = false;
@@ -255,9 +288,9 @@ namespace Bussiness
                     new SqlParameter("@IsActive", model.IsActive),
                     new SqlParameter("@Result", SqlDbType.Int)
                 };
-                para[5].Direction = ParameterDirection.ReturnValue;
+                para[14].Direction = ParameterDirection.ReturnValue;
                 result = this.db.RunProcedure("SP_ConsortiaBadge_Update", para);
-                int returnValue = (int)para[5].Value;
+                int returnValue = (int)para[14].Value;
                 result = (returnValue == 0);
                 int num = returnValue;
                 if (num == 2)
@@ -274,6 +307,7 @@ namespace Bussiness
             }
             return result;
         }
+
         public bool Delete(int id)
         {
             bool result = false;
@@ -281,9 +315,9 @@ namespace Bussiness
             {
                 SqlParameter[] para = new SqlParameter[]
                 {
-                    new SqlParameter("@Id", id)
+                    new SqlParameter("@lstId", id.ToString())
                 };
-                result = this.db.RunProcedure("SP_Users_Friends_Delete", para);
+                result = this.db.RunProcedure("SP_Admin_DeleteMultiple", para);
             }
             catch (Exception e)
             {
@@ -295,26 +329,76 @@ namespace Bussiness
             return result;
         }
        
+        public bool CheckUserLogin(string userName ,string password , ref string msg)
+        {
+            bool result = false;
+            try
+            {
+                SqlParameter[] para = new SqlParameter[3]
+                {
+                    new SqlParameter("@UserName", userName),
+					 new SqlParameter("@Password", password),
+					new SqlParameter("@Result", SqlDbType.Int)
+
+                };
+                para[2].Direction = ParameterDirection.ReturnValue;
+                result = this.db.RunProcedure("SP_Admin_CheckLogin", para);
+                int returnValue = (int)para[2].Value;
+                result = (returnValue == 0);
+                if (result)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                    switch (returnValue)
+                    {
+                        case 1:
+                            msg = "Tài khoản hoặc mật khẩu không để trống";
+                            break;
+                        case 2:
+                            msg = "Tài khoản hoặc mật khẩu không chính xác";
+                            break;
+                        case 3:
+                            msg = "Tài khoản chưa được kích hoạt";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (BaseBussiness.log.IsErrorEnabled)
+                {
+                    BaseBussiness.log.Error("Init", e);
+                }
+            }
+            return result;
+        }
+
+        #region ConvertData 
+        
         public Admin ReaderToModel(SqlDataReader reader)
 		{
 			Admin model = new Admin();
 			model.Id = (int)reader["Id"];
-			model.UserName = ((reader["UserName"] == null) ? "" : reader["UserName"].ToString());
-			model.Password = ((reader["Password"] == null) ? "" : reader["Password"].ToString());
-			model.FirstName = ((reader["FirstName"] == null) ? "" : reader["FirstName"].ToString());
-			model.LastName = ((reader["LastName"] == null) ? "" : reader["LastName"].ToString());
-			model.Email = ((reader["Email"] == null) ? "" : reader["Email"].ToString());
-			model.Phone = ((reader["Phone"] == null) ? "" : reader["Phone"].ToString());
-			model.Facebook = ((reader["Facebook"] == null) ? "" : reader["Facebook"].ToString());
-			model.CreatedDate = string.IsNullOrEmpty(reader["CreatedDate"].ToString()) ? DateTime.Now
-					 : (DateTime)reader["CreatedDate"];
-			model.ModifiedDate = string.IsNullOrEmpty(reader["ModifiedDate"].ToString()) ? DateTime.Now
-					 : (DateTime)reader["ModifiedDate"];
-
-            model.CreateById = (reader["CreateById"] != null) ? 0 : (int)reader["CreateById"];
-            model.ModifiedId = (reader["ModifiedId"] != null) ? 0 : (int)reader["ModifiedId"];
+			model.UserName = reader["UserName"] != null ? reader["UserName"].ToString() : "";
+			model.Password = reader["Password"] != null ? reader["Password"].ToString() : "";
+            model.FirstName = reader["FirstName"] != null ? reader["FirstName"].ToString() : "";
+            model.LastName = reader["LastName"] != null ? reader["LastName"].ToString() : "";
+            model.Email = reader["Email"] != null ? reader["Email"].ToString() : "";
+            model.Phone = reader["Phone"] != null ? reader["Phone"].ToString() : "";
+            model.Facebook = reader["Facebook"] != null ? reader["Facebook"].ToString() : "";
+            model.CreatedDate = reader["CreatedDate"] != null ? (DateTime)reader["CreatedDate"] : DateTime.Now;
+            model.ModifiedDate = reader["ModifiedDate"] != null ? (DateTime)reader["ModifiedDate"] : DateTime.Now;
+            model.CreateById = reader["CreateById"] != null ? 0 : (int)reader["CreateById"];
+            model.ModifiedId = reader["ModifiedId"] != null ? 0 : (int)reader["ModifiedId"];
             model.IsActive = (bool)reader["IsActive"];
 			return model;
 		}
-	}
+
+        #endregion
+    }
 }

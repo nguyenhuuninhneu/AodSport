@@ -148,12 +148,19 @@
       <DependentUpon>CImage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Controllers\ContactController.cs" />
+    <Compile Include="Controllers\FixturesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MatchController.cs" />
+    <Compile Include="Controllers\MatchResultController.cs" />
+    <Compile Include="Controllers\PointTableController.cs" />
+    <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\HelperCommon.cs" />
     <Compile Include="Helper\HelperImage.cs" />
+    <Compile Include="Models\CustomPrincipalSerializeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
   </ItemGroup>
@@ -166,18 +173,80 @@
     <Content Include="assets-front\css\owl.carousel.min.css" />
     <Content Include="assets-front\css\prettyPhoto.css" />
     <Content Include="assets-front\css\responsive.css" />
+    <Content Include="assets-front\images\entity11.png" />
+    <Content Include="assets-front\images\entity11_hdpi.png" />
+    <Content Include="assets-front\images\exp2.png" />
+    <Content Include="assets-front\images\exp2_hdpi.png" />
+    <Content Include="assets-front\images\flags\arg-flag.jpg" />
+    <Content Include="assets-front\images\flags\aus-flag.jpg" />
+    <Content Include="assets-front\images\flags\bel-flag.jpg" />
+    <Content Include="assets-front\images\flags\braz-flag.jpg" />
+    <Content Include="assets-front\images\flags\col-flag.jpg" />
+    <Content Include="assets-front\images\flags\cr-flag.jpg" />
+    <Content Include="assets-front\images\flags\cro-flag.jpg" />
+    <Content Include="assets-front\images\flags\den-flag.jpg" />
+    <Content Include="assets-front\images\flags\eg-flag.jpg" />
+    <Content Include="assets-front\images\flags\eng-flag.jpg" />
+    <Content Include="assets-front\images\flags\fr-flag.jpg" />
+    <Content Include="assets-front\images\flags\ger-flag.jpg" />
+    <Content Include="assets-front\images\flags\ice-flag.jpg" />
+    <Content Include="assets-front\images\flags\ir--flag.jpg" />
+    <Content Include="assets-front\images\flags\jp-flag.jpg" />
+    <Content Include="assets-front\images\flags\korea-flag.jpg" />
+    <Content Include="assets-front\images\flags\logo-dark.png" />
+    <Content Include="assets-front\images\flags\logo.png" />
+    <Content Include="assets-front\images\flags\mexi-flag.jpg" />
+    <Content Include="assets-front\images\flags\moro-flag.jpg" />
+    <Content Include="assets-front\images\flags\niger-flag.jpg" />
+    <Content Include="assets-front\images\flags\pana-flag.jpg" />
+    <Content Include="assets-front\images\flags\peru-flag.jpg" />
+    <Content Include="assets-front\images\flags\pol-flag.jpg" />
+    <Content Include="assets-front\images\flags\por-flag.jpg" />
+    <Content Include="assets-front\images\flags\ru-flag.jpg" />
+    <Content Include="assets-front\images\flags\sa-flag.jpg" />
+    <Content Include="assets-front\images\flags\sen-flag.jpg" />
+    <Content Include="assets-front\images\flags\serbia-flag.jpg" />
+    <Content Include="assets-front\images\flags\sp-flag.jpg" />
+    <Content Include="assets-front\images\flags\swe-flag.jpg" />
+    <Content Include="assets-front\images\flags\swit-flag.jpg" />
+    <Content Include="assets-front\images\flags\tuni-flag.jpg" />
+    <Content Include="assets-front\images\flags\ur-flag.jpg" />
+    <Content Include="assets-front\images\fvid1.jpg" />
+    <Content Include="assets-front\images\fvid2.jpg" />
+    <Content Include="assets-front\images\hlgall1.jpg" />
+    <Content Include="assets-front\images\hlgall2.jpg" />
+    <Content Include="assets-front\images\hlgall3.jpg" />
+    <Content Include="assets-front\images\hlgall4.jpg" />
+    <Content Include="assets-front\images\hlgall5.jpg" />
+    <Content Include="assets-front\images\hlgall6.jpg" />
+    <Content Include="assets-front\images\innerbanner.jpg" />
     <Content Include="assets-front\images\innerpagebg.jpg" />
     <Content Include="assets-front\images\insta1.jpg" />
+    <Content Include="assets-front\images\insta2.jpg" />
+    <Content Include="assets-front\images\insta3.jpg" />
+    <Content Include="assets-front\images\insta4.jpg" />
+    <Content Include="assets-front\images\insta5.jpg" />
+    <Content Include="assets-front\images\insta6.jpg" />
+    <Content Include="assets-front\images\loc-icon.png" />
+    <Content Include="assets-front\images\logo-dark.png" />
+    <Content Include="assets-front\images\logo.png" />
+    <Content Include="assets-front\images\mail-icon.png" />
     <Content Include="assets-front\images\match-detailsbg.jpg" />
     <Content Include="assets-front\images\mlogo1.png" />
     <Content Include="assets-front\images\mlogo2.png" />
+    <Content Include="assets-front\images\phone-icon.png" />
     <Content Include="assets-front\images\player1.png" />
     <Content Include="assets-front\images\player2.png" />
     <Content Include="assets-front\images\player3.png" />
     <Content Include="assets-front\images\player4.png" />
     <Content Include="assets-front\images\playerbg.jpg" />
+    <Content Include="assets-front\images\tag.png" />
+    <Content Include="assets-front\images\team-dimg.jpg" />
     <Content Include="assets-front\images\Team3-240x280.png" />
     <Content Include="assets-front\images\Team4-240x280.png" />
+    <Content Include="assets-front\images\tplayer5.jpg" />
+    <Content Include="assets-front\images\tplayer6.jpg" />
+    <Content Include="assets-front\images\tsimg1.jpg" />
     <Content Include="assets-front\js\audioplayer.min.js" />
     <Content Include="assets-front\js\bootstrap.min.js" />
     <Content Include="assets-front\js\custom.js" />
@@ -235,6 +304,7 @@
     <Content Include="assets\custom\icon\icon-cochu-tang.png" />
     <Content Include="assets\custom\icon\icon-thongke-luotxem.png" />
     <Content Include="assets\custom\icon\icon-thongke-ngay.png" />
+    <Content Include="assets\custom\icon\logo.jpg" />
     <Content Include="assets\custom\icon\logoLogin.png" />
     <Content Include="assets\custom\icon\powerby.png" />
     <Content Include="assets\custom\icon\prev.gif" />
@@ -3561,6 +3631,9 @@
     <Content Include="assets-front\webfonts\fa-brands-400.woff2" />
     <Content Include="assets-front\webfonts\fa-regular-400.woff2" />
     <Content Include="assets-front\webfonts\fa-solid-900.woff2" />
+    <Content Include="Areas\Administrator\Views\Shared\_MenuPage.cshtml" />
+    <Content Include="Areas\Administrator\Views\Dashboard\MenuMain.cshtml" />
+    <Content Include="Areas\Administrator\Views\Dashboard\ViewFile.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -3609,6 +3682,15 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\UpcomingMatch.cshtml" />
+    <Content Include="Views\Match\UpcomingMatch.cshtml" />
+    <Content Include="Views\Match\Index.cshtml" />
+    <Content Include="Views\MatchResult\Index.cshtml" />
+    <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\PointTable\Index.cshtml" />
+    <Content Include="Views\Fixtures\Index.cshtml" />
+    <Content Include="Views\Contact\Index.cshtml" />
+    <Content Include="Views\Team\TeamPlayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -3616,7 +3698,6 @@
     <Folder Include="Areas\Administrator\ViewModel\" />
     <Folder Include="Areas\Administrator\Views\JqueryUpload\" />
     <Folder Include="assets\img\realestate\thumbs\" />
-    <Folder Include="Models\" />
     <Folder Include="Views\Default\" />
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,8 @@ namespace AodSport.Areas.Administrator
             context.MapRoute(
                 "Administrator_default",
                 "Administrator/{controller}/{action}/{id}",
-                new { controller= "Dashboard", action = "Index", id = UrlParameter.Optional }
+                new { controller= "Dashboard", action = "Index", id = UrlParameter.Optional},
+               new[] { "AodSport.Areas.Administrator.Controllers" }
             );
         }
     }

@@ -34,12 +34,33 @@ namespace SqlDataProvider.SqlDataProvider.Data
 			get;
 			set;
 		}
+		public DateTime CreatedDate
+		{
+			get;
+			set;
+		}
+
+		public DateTime ModifiedDate
+		{
+			get;
+			set;
+		}
 		public int? CreateById
 		{
 			get;
 			set;
 		}
-		public int IsActive
+		public int? ModifiedId
+		{
+			get;
+			set;
+		}
+		public bool IsActive
+		{
+			get;
+			set;
+		}
+		public bool IsBackEnd
 		{
 			get;
 			set;

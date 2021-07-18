@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Xem chi tiết file";
+    var linkdown = (string)TempData["linkdown"];
+    var type = linkdown.Split('.').Last();
+    var typevideo = "m1v,m2v,avi,gl,mjpg,moov,mov,movie,mp2,mpa,mpe,mpeg,mpg,mv,mp4";
+    var typeimage = "gif,jpeg,jpg,png"; 
+}
+
+<script src="~/Assets/custom/js/jwPlayer/jwplayer.min.js"></script>
+<script> jwplayer.key = "mGDOS7fVOAOlydlRCHC0GR7sLKgUNTAM1BH6/Q=="; </script>
+ 
+@if (type == "pdf")
+{
+    <object data="@linkdown" type="application/pdf" style="width: 100%; height: 500px"><embed src="@linkdown" type="application/pdf" style="width: 100%; height: 500px" /></object>
+}
+else if (typevideo.Split(',').Contains(type))
+{
+    <div style="width: 80%; margin: auto; max-width: 1000px">
+        <div id="videoPlayer" tabindex="0"></div>
+    </div>
+    <script>
+                $(document).ready(function () {
+                    jwplayer('videoPlayer').setup({
+                        file: '@linkdown',
+                        image: '',
+                        title: '',
+                        width: '100%',
+                        aspectratio: '16:9',
+                        mute: 'false',
+                        autostart: 'true',
+                        repeat: 'false',
+                        primary: 'html5',
+                        preload: 'auto'
+                    });
+                });
+    </script>
+}
+else if (typeimage.Split(',').Contains(type))
+{
+    <div style="width: 80%; margin: auto; max-width: 1000px">
+        <img src="@linkdown" alt="" style="max-width: 100%; height: auto; display: block; margin: auto"/>
+    </div> 
+}
+else
+{
+    var host = HttpContext.Current.Request.Url.Host;//localhost
+    var linkOnline = HttpContext.Current.Request.Url.Scheme + "://" + host + ":" + HttpContext.Current.Request.Url.Port + linkdown;
+
+    <iframe src="http://docs.google.com/gview?url=@linkOnline&embedded=true" frameborder="1" onselectstart="return false" oncontextmenu="return false" onload="noMenu()" width="100%" height="500"></iframe>
+}

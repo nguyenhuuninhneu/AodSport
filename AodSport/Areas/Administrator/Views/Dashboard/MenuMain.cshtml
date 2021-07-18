@@ -1,0 +1,146 @@
+﻿@using SqlDataProvider.SqlDataProvider.Data
+@model List<Menu>
+@{
+    Layout = null;
+}
+<input type="hidden" value="ninh.com" id="TenMienWebSite" />
+<div id="menuMain">
+    <ul class="fl"> 
+        @foreach (var item in Model.Where(g=>g.ParentId == 0 && g.IsBackEnd))
+        {
+            <li>
+                <a href="@item.Url" @(!String.IsNullOrEmpty(item.Url) && item.Url.Contains("http") ? "target='_blank'":"")>@item.Name</a>
+                <ul>
+                    @foreach (var item_2 in Model.Where(g=>g.ParentId == item.Id && g.IsBackEnd))
+                    {
+                        <li><a href="@item_2.Url" title="@item_2.Name"><span>@item_2.Name</span></a></li>
+                    }
+                </ul>
+            </li>
+        }
+        <li class="fr">
+            <a href="/Login/Logout" class="icon-menu" title="Đăng xuất"><i class="icon-login"></i></a>
+        </li>
+        <li class="fr">
+            <a href="javascript://"><i class="fa fa-user m-r-5"></i> NINH</a>
+            <ul>
+                <li><a href="javascript://" onclick="@*loadfrmChangeInfo(@userData.Id)*@" title="Cập nhật hồ sơ"><i class="icon-info"></i> <span>Cập nhật hồ sơ</span></a></li>
+                <li>
+                    @*<a href="" onclick="return ChangePass(@idUser);" title="Đổi mật khẩu"><i class="icon-settings"></i> <span>Đổi mật khẩu</span></a>*@
+                    <a href="javascript://" data-toggle="modal" data-target="#doimatkhau" @*data-id="@userData.Id"*@ data-rel="" title="Thay đổi mật khẩu" class="doimatkhau_dialog" role=""><i class="icon-settings"></i> <span>Đổi mật khẩu</span></a>
+                    @*@Ajax.ActionLink(
+                "Đổi mật khẩu", // <-- Text to display
+                "ChangePass", // <-- Action/Method Name
+                "Users", //<!-- Controller Name
+                new AjaxOptions
+                {
+                    UpdateTargetId = "responsive", // <-- DOM element ID to update
+                    InsertionMode = InsertionMode.Replace, // <-- Replace the content of DOM element
+                    HttpMethod = "GET", // <-- HTTP method
+                    OnBegin = "users.blockUI",
+                    OnComplete = "users.loadfrmAddSussess", //OnComplete JS Function
+                    OnFailure = "users.unblockUI"
+                },
+                new { @class = "btn btn-primary fa fa-plus" } //-- Class
+                )*@
+                </li>
+            </ul>
+        </li>
+        @*@if (userData != null && userData.IsRoot)
+        {  
+            <li class="fr">
+                <a href="javascript:void(0);"><i class="icon-equalizer"></i></a>
+                <ul>
+                    <li><a href="/Users" title="Người dùng"><i class="icon-user"></i> <span>Người dùng</span></a></li>
+                    <li><a href="/UserGroups" title="Nhóm người dùng"><i class="fa fa-users"></i> <span>Nhóm người dùng</span></a></li>
+                    <li><a href="/Menu" title="Cấu hình menu"><i class="fa fa-bars" aria-hidden="true"></i> <span>Cấu hình menu</span></a></li>
+                </ul>
+            </li> 
+        }*@ 
+        @*<li class="fr">
+            <a href="javascript:void(0);">
+                @Html.Raw(currentLang != null ? "<img src='" + currentLang.Photo + "' alt='' style='width: 30px; margin-top: -4px'/>" : "<i class='fa fa-language' aria-hidden='true'></i>")
+            </a>
+            <ul class="listLang">
+                @if (lstLang != null && lstLang.Any())
+                {
+                    foreach (var item in lstLang)
+                    {
+                        <li>
+                            <a href="javascript:void(0);" title="@item.Name" data-id="@item.Id">
+                                <img src="@item.Photo" alt="flag" />
+                                <span class="name">@item.Name</span>
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </li>*@
+    </ul>
+
+
+    <div class="cb"></div>
+</div>  
+<div class="modal fade" id="mymodal" tabindex="-1" backdrop='static' data-keyboard='false' role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div>
+<div id="doimatkhau" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="show_doimatkhau">
+        </div>
+    </div>
+</div>
+<script>
+    $('.listLang li a').click(function () { 
+        var id = $(this).attr("data-id");
+        $.ajax({
+            url: "/Lang/ChangeCurrentLang",
+            type: "POST",
+            data: { id: id },
+            success: function (result) {
+                if (result.status) {
+                    toastr.success(result.message);
+                    location.reload();
+                }
+            },
+            error: function () {
+                toastr.error("Lỗi tải trang");
+                modules.unblockUI();
+            }
+        });
+    });
+    $(document).on("click", ".doimatkhau_dialog", function () {
+        var id = $(this).data('id');
+        $.ajax({
+            type: "GET",
+            url: "/Users/ChangePass/" + id,
+            success: function (data) {
+                if (data)
+                    $("#show_doimatkhau").html(data);
+            }
+        });
+    });
+    function loadfrmChangeInfo(id) {
+        modal.Render("/Users/ChangeInfo/" + id, "Cập nhật thông tin", "modal-lg");
+    }
+    function onChangeSuccess(res) {
+        if (res.status) {
+            toastr.success(res.message);
+            window.location.reload();
+        } else {
+            toastr.success(res.message);
+        }
+    }
+    //Không xóa
+    //loadfrmChangeInfo: function (id) {
+    //    modal.Render("/Users/ChangeInfo/" + id, "Cập nhật thông tin", "modal-lg");
+    //},
+    //onChangeSuccess: function (res) {
+    //    if (res.status) {
+    //        toastr.success(res.message);
+    //        window.location.reload();
+    //    } else {
+    //        toastr.success(res.message);
+    //    }
+    //},
+</script>
