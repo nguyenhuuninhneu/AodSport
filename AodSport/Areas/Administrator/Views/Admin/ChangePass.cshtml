@@ -1,0 +1,157 @@
+﻿@model Core.Models.Users
+@{
+    Layout = null;
+    ViewBag.Title = "Thay đổi mật khẩu";
+    var id = (int)ViewBag.id;
+}
+
+<div class="modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title h4">Đổi mật khẩu</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <form action="/Users/ChangePass" method="post" id="basicForm" onsubmit="return Submit();">
+
+            <div class="modal-body">
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@id" />
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-4">
+                            <span>Mật khẩu cũ <span class="cred">(*)</span></span>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="password" value="" id="OldPass" name="OldPass" required="" class="form-control" data-parsley-maxlength="56" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-4">
+                            <span>Mật khẩu mới <span class="cred">(*)</span></span>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="password" value="" id="password" name="password" required="" class="form-control" data-parsley-maxlength="56" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="control-label col-md-4">
+                            <span>Nhập lại mật khẩu mới <span class="cred">(*)</span></span>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="password" value="" id="repassword" name="repassword" required="" class="form-control" data-parsley-maxlength="56" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@Styles.Render("~/Css/Form")
+@Scripts.Render("~/Scripts/Form")
+<script>
+    $(document).ready(function () {
+        $("#basicForm").validate({
+            rules: {
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                repassword: {
+                    required: true
+                }
+            },
+            messages: {
+                password: {
+                    required: "Bạn phải nhập mật khẩu mới",
+                    minlength: "Mật khẩu tối thiểu 6 ký tự"
+                },
+                repassword: {
+                    required: "Bạn phải nhập mật khẩu mới"
+                }
+            }
+        })
+    });
+    $("#OldPass").on("change", function () {
+        debugger;
+        var id = @id;
+        var oldpass = $(this).val();
+        $.ajax({
+            url: "/Users/CheckPassOld",
+            type: "GET",
+            data: { id: id,oldpass:oldpass },
+            success: function (result) {
+                if (result.result == "1") {
+                    toastr.success(result.message);
+                }else{
+                    toastr.error(result.message);
+                    return false;
+                }
+            },
+            error: function () {
+                toastr.error("Lỗi tải trang");
+                modules.unblockUI();
+            }
+        });
+    });
+
+    $("#repassword").on("change", function () {
+        var repassword = $(this).val();
+        var password = $("#password").val();
+        if (repassword == password) {
+            toastr.success("Mật khẩu trùng khớp");
+        }else{
+            toastr.error("Mật khẩu mới chưa trùng khớp");
+            return false;
+        }
+    });
+    function Submit(){
+        var id = @id;
+        var oldpass = $("#OldPass").val();
+        if (oldpass!="") {
+            $.ajax({
+                url: "/Users/CheckPassOld",
+                type: "GET",
+                data: { id: id,oldpass:oldpass },
+                success: function (result) {
+                    if (result.result == "1") {
+                        toastr.success(result.message);
+                    }else{
+                        toastr.error(result.message);
+                        $(this).focus();
+                        return false;
+                    }
+                },
+                error: function () {
+                    toastr.error("Lỗi tải trang");
+                    modules.unblockUI();
+                }
+            });
+        }
+
+        debugger;
+        var repassword = $("#repassword").val();
+        var password = $("#password").val();
+        if (password !="" &&repassword !="") {
+            if (repassword == password) {
+                toastr.success("Mật khẩu trùng khớp");
+            }else{
+                toastr.error("Mật khẩu mới chưa trùng khớp");
+                $("#repassword").focus();
+                return false;
+            }
+        }
+        return true;
+    }
+</script>

@@ -1,0 +1,172 @@
+﻿@using SqlDataProvider.Data
+@model List<Admin>
+@using Veslic;
+@{
+    var stt = ViewBag.stt;
+}
+
+<div class="table-responsive-md">
+    <table class="table table-hover table-bordered">
+        <tr>
+            <th>
+                <label class="fancy-checkbox">
+                    <input type="hidden" id="hdfID" />
+                    <input class="select-all" id="chkall" type="checkbox" name="checkbox">
+                    <span></span>
+                </label>
+            </th>
+            <th class="text-center">STT</th>
+            <th class="text-center">Ảnh</th>
+            <th class="sapxep" id="FullName">
+                Họ và tên
+                <i class="fa fa-sort"></i>
+            </th>
+            <th class="sapxep" id="Username">
+                Username
+                <i class="fa fa-sort"></i>
+            </th>
+            <th class="sapxep" id="Email">
+                Email
+                <i class="fa fa-sort"></i>
+            </th>
+            @*<th class="sapxep" id="Email">
+                Nhóm người dùng
+                <i class="fa fa-sort"></i>
+            </th>*@
+            <th class="sapxep" id="Status">
+                Trạng thái
+                <i class="fa fa-sort"></i>
+            </th>
+            <th>Thao tác</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            stt++;
+            <tr>
+                <td class="w50px">
+                    <label class="fancy-checkbox">
+                        <input class="checkbox-tick" type="checkbox" value="@item.Id">
+                        <span></span>
+                    </label>
+                    <input type="hidden" value="@item.Id" class="item_ID" />
+                </td>
+                <td class="text-center w50px">@(stt + (ViewBag.page - 1)*ViewBag.pageSize)</td>
+                <td class="w100px">
+                    <div class="wImage">
+                        <a href="javascript://" class="image">
+                            <img src="@HelperImage.getFullUrl(item.UserName)">
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                @*<td>
+                    @item.NhomNguoiDung
+                </td>*@
+                <td class="text-center">
+                    @if (!item.IsActive)
+                    {
+                        @Ajax.ActionLink(
+                            "Vô hiệu",
+                            "Status",
+                            "Users",
+                            new { id = item.Id },
+                            new AjaxOptions
+                            {
+                                HttpMethod = "GET",
+                                OnBegin = "users.blockUI",
+                                OnComplete = "users.statusSussess",
+                                OnFailure = "users.unblockUI"
+                            },
+                            new { @class = "badge badge-danger" }
+                            )
+                    }
+                    else
+                    {
+                        @Ajax.ActionLink(
+                            "Kích hoạt",
+                            "Status",
+                            "Users",
+                            new { id = item.Id },
+                            new AjaxOptions
+                            {
+                                HttpMethod = "GET",
+                                OnBegin = "users.blockUI",
+                                OnComplete = "users.statusSussess",
+                                OnFailure = "users.unblockUI"
+                            },
+                            new { @class = "badge badge-success" }
+                            )
+                    }
+                </td>
+                <td class="text-center">
+                    @Ajax.ActionLink(
+                        " ",
+                        "Edit",
+                        "Users",
+                        new { id = item.Id },
+                        new AjaxOptions
+                        {
+                            UpdateTargetId = "responsive",
+                            InsertionMode = InsertionMode.Replace,
+                            HttpMethod = "GET",
+                            OnBegin = "users.blockUI",
+                            OnComplete = "users.loadfrmEditSussess",
+                            OnFailure = "users.unblockUI"
+                        },
+                        new { @class = "btn btn-sm btn-outline-success icon icon-pencil", title = "Sửa" }
+                        )
+                    @Ajax.ActionLink(
+                        " ",
+                        "ChangePass",
+                        "Users",
+                        new { id = item.Id },
+                        new AjaxOptions
+                        {
+                            UpdateTargetId = "responsive",
+                            InsertionMode = InsertionMode.Replace,
+                            HttpMethod = "GET",
+                            OnBegin = "users.blockUI",
+                            OnComplete = "users.loadfrmEditSussess",
+                            OnFailure = "users.unblockUI"
+                        },
+                        new { @class = "btn btn-sm btn-outline-warning fa fa-key", title = "Đổi mật khẩu" }
+                        )
+                    <a href="javascript://" class="btn btn-sm btn-outline-danger" title="Xóa" onclick="users.onDelete(@item.Id)"><i class="icon-trash"></i></a>
+
+
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<div class="commonTool">
+    <div class="fl">
+        <label class="lh35 mb0">Tổng số bản ghi: @ViewBag.total</label>
+    </div>
+    <div class="fr">
+        <select id="pageSize" name="pageSize" aria-controls="pageSize" class="form-control input-sm input-xsmall input-inline" onchange="users.changePageSize()">
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+        </select>
+        <div id="paginationholder">
+        </div>
+    </div>
+    <div class="cb"></div>
+</div>
+<script type="text/javascript">
+    users.initListData();
+    users.selectPageSize('@ViewBag.pageSize');
+    users.showPaging('@ViewBag.totalPage');
+</script>

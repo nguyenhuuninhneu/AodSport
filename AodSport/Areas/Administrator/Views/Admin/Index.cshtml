@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<!--Khối đường dẫn trang-->
+<div class="block-header">
+    <div class="row">
+        <div class="col-lg-5 col-md-8 col-sm-12">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active">Quản lý người dùng</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="header">
+        <form id="searchForm" role="form"  class="fl">
+            <div class="form-horizontal">
+                <div class="form-group mb-0">
+                    <div class="row">
+                        <div class="col-md-9 padR-0">
+                            <input type="text" class="form-control keyEnter" name="keySearch" placeholder="Tìm username/email/Họ và tên" onchange="users.loadData(1)">
+                        </div>
+                        <div class="col-md-3">
+                            <a href="javascript:void(0)" class="btn btn-primary pull-right" onclick="users.loadData(1)">Tìm kiếm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="fr">
+            @Ajax.ActionLink(
+                "Thêm mới", // <-- Text to display
+                "Create", // <-- Action/Method Name
+                "Users", //<!-- Controller Name
+                new AjaxOptions
+                {
+                    UpdateTargetId = "responsive", // <-- DOM element ID to update
+                    InsertionMode = InsertionMode.Replace, // <-- Replace the content of DOM element
+                    HttpMethod = "GET", // <-- HTTP method
+                    OnBegin = "users.blockUI",
+                    OnComplete = "users.loadfrmAddSussess", //OnComplete JS Function
+                    OnFailure = "users.unblockUI"
+                },
+                new { @class = "btn btn-primary fa fa-plus" } //-- Class
+                )
+        
+            @*@Ajax.ActionLink(
+            "Cập nhật vị trí", // <-- Text to display
+            "Create", // <-- Action/Method Name
+            "Users", //<!-- Controller Name
+            new AjaxOptions
+            {
+                HttpMethod = "GET", // <-- HTTP method
+                OnBegin = "users.blockUI",
+                OnComplete = "users.loadfrmAddSussess", //OnComplete JS Function
+                OnFailure = "users.unblockUI"
+            },
+            new { @class = "btn btn-success waves-effect waves-light fa fa-refresh" } //-- Class
+            )*@
+
+            <a href="javascript://" onclick="users.onMultiDelete();" class="btn btn-danger"><i class="icon-trash"></i> Xóa nhiều</a>
+        </div>
+        <div class="cb"></div>
+    </div>
+    <div class="body">
+        <div class="table-responsive" id="gridData">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/AppJs/users.js"></script>
+}

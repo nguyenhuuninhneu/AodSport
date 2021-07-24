@@ -1,7 +1,9 @@
 ﻿@using SqlDataProvider.SqlDataProvider.Data
+@using AodSport.Areas.Administrator.Controllers
 @model List<Menu>
 @{
     Layout = null;
+    var userData = (User as CustomPrincipal);
 }
 <input type="hidden" value="ninh.com" id="TenMienWebSite" />
 <div id="menuMain">
@@ -22,9 +24,9 @@
             <a href="/Login/Logout" class="icon-menu" title="Đăng xuất"><i class="icon-login"></i></a>
         </li>
         <li class="fr">
-            <a href="javascript://"><i class="fa fa-user m-r-5"></i> NINH</a>
+            <a href="javascript://"><i class="fa fa-user m-r-5"></i> @(userData!= null && !String.IsNullOrEmpty(userData.FirstName) ? userData.FirstName : "")</a>
             <ul>
-                <li><a href="javascript://" onclick="@*loadfrmChangeInfo(@userData.Id)*@" title="Cập nhật hồ sơ"><i class="icon-info"></i> <span>Cập nhật hồ sơ</span></a></li>
+                <li><a href="javascript://" onclick="loadfrmChangeInfo(@userData.Id)" title="Cập nhật hồ sơ"><i class="icon-info"></i> <span>Cập nhật hồ sơ</span></a></li>
                 <li>
                     @*<a href="" onclick="return ChangePass(@idUser);" title="Đổi mật khẩu"><i class="icon-settings"></i> <span>Đổi mật khẩu</span></a>*@
                     <a href="javascript://" data-toggle="modal" data-target="#doimatkhau" @*data-id="@userData.Id"*@ data-rel="" title="Thay đổi mật khẩu" class="doimatkhau_dialog" role=""><i class="icon-settings"></i> <span>Đổi mật khẩu</span></a>

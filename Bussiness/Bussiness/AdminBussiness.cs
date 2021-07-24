@@ -37,101 +37,17 @@ namespace Bussiness
 			}
 			return list;
 		}
-        public Admin[] GetByPage(int page, int size, ref int total, int order, string name, int consortiaID, int level, int openApply)
+        public List<Admin> GetByPage(int page, int size, ref int total, string keyword, string fieldSort, string order)
         {
             List<Admin> models = new List<Admin>();
             try
             {
-                string sWhere = " IsExist=1 ";
-                if (!string.IsNullOrEmpty(name))
+                string sWhere = " 1 = 1 ";
+                if (!string.IsNullOrEmpty(keyword))
                 {
-                    sWhere = sWhere + " and ConsortiaName like '%" + name + "%' ";
-                }
-                if (consortiaID != -1)
-                {
-                    object obj = sWhere;
-                    sWhere = string.Concat(new object[]
-                    {
-                        obj,
-                        " and ConsortiaID =",
-                        consortiaID,
-                        " "
-                    });
-                }
-                if (level != -1)
-                {
-                    object obj2 = sWhere;
-                    sWhere = string.Concat(new object[]
-                    {
-                        obj2,
-                        " and Level =",
-                        level,
-                        " "
-                    });
-                }
-                if (openApply != -1)
-                {
-                    object obj3 = sWhere;
-                    sWhere = string.Concat(new object[]
-                    {
-                        obj3,
-                        " and OpenApply =",
-                        openApply,
-                        " "
-                    });
+                    sWhere = sWhere + " and ConsortiaName like '%" + keyword + "%' ";
                 }
                 string sOrder = "ConsortiaName";
-                switch (order)
-                {
-                    case 1:
-                        sOrder = "ReputeSort";
-                        break;
-
-                    case 2:
-                        sOrder = "ChairmanName";
-                        break;
-
-                    case 3:
-                        sOrder = "Count desc";
-                        break;
-
-                    case 4:
-                        sOrder = "Level desc";
-                        break;
-
-                    case 5:
-                        sOrder = "Honor desc";
-                        break;
-
-                    case 10:
-                        sOrder = "LastDayRiches desc";
-                        break;
-
-                    case 11:
-                        sOrder = "AddDayRiches desc";
-                        break;
-
-                    case 12:
-                        sOrder = "AddWeekRiches desc";
-                        break;
-
-                    case 13:
-                        sOrder = "LastDayHonor desc";
-                        break;
-
-                    case 14:
-                        sOrder = "AddDayHonor desc";
-                        break;
-
-                    case 15:
-                        sOrder = "AddWeekHonor desc";
-                        break;
-
-                    case 16:
-                        sOrder = "level desc,LastDayRiches desc";
-                        break;
-                }
-                sOrder += ",ConsortiaID ";
                 DataTable dt = base.GetPage("V_Admin", sWhere, page, size, "*", sOrder, "Id", ref total);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -160,7 +76,7 @@ namespace Bussiness
                     BaseBussiness.log.Error("Init", e);
                 }
             }
-            return models.ToArray();
+            return models;
         }
         public Admin GetById(int id)
 		{
@@ -355,12 +271,9 @@ namespace Bussiness
                     switch (returnValue)
                     {
                         case 1:
-                            msg = "Tài khoản hoặc mật khẩu không để trống";
-                            break;
-                        case 2:
                             msg = "Tài khoản hoặc mật khẩu không chính xác";
                             break;
-                        case 3:
+                        case 2:
                             msg = "Tài khoản chưa được kích hoạt";
                             break;
                         default:

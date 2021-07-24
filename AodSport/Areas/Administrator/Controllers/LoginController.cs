@@ -35,19 +35,19 @@ namespace AodSport.Areas.Administrator.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            //if (!Veslic.Veslic.checkLicense())
-            //{
-            //    try
-            //    {
-            //        string active_key = Veslic.Veslic.activeKey();
-            //        string responeData = "";
-            //        responeData = Veslic.Veslic.activeServerVES(active_key);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //    }
-            //    return RedirectToAction("Register", "License");
-            //}
+            if (!Veslic.Veslic.checkLicense())
+            {
+                try
+                {
+                    string active_key = Veslic.Veslic.activeKey();
+                    string responeData = "";
+                    responeData = Veslic.Veslic.activeServerVES(active_key);
+                }
+                catch (Exception ex)
+                {
+                }
+                return RedirectToAction("Register", "License");
+            }
             return View();
             
         }
@@ -83,29 +83,32 @@ namespace AodSport.Areas.Administrator.Controllers
                         var info = db.GetByUserName(model.UserName);
                         if (info != null && info.IsActive)
                         {
-                            // khai bao tren coockie
                             CustomPrincipalSerializeModel serializeModel = new CustomPrincipalSerializeModel();
                             serializeModel.Id = info.Id;
-                            serializeModel.Username = info.UserName;
+                            serializeModel.UserName = info.UserName;
                             serializeModel.FirstName = info.FirstName;
                             serializeModel.LastName = info.LastName;
-                            //gan vao cookie
+                            serializeModel.Phone = info.Phone;
+                            serializeModel.Email = info.Email;
+                            serializeModel.Facebook = info.Facebook;
+
                             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
-                            string AccountData = serializer.Serialize(serializeModel);
+                            string userData = serializer.Serialize(serializeModel);
 
                             FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
-                                1,
-                                info.UserName,
-                                DateTime.Now,
-                                DateTime.Now.AddMinutes(480),
-                                false,
-                                AccountData);
+                                     1,
+                                     info.Email,
+                                     DateTime.Now,
+                                     DateTime.Now.AddMinutes(15),
+                                     false,
+                                     userData);
 
                             string encTicket = FormsAuthentication.Encrypt(authTicket);
                             HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encTicket);
                             Response.Cookies.Add(faCookie);
-                            return Redirect("/Administrator/Dashboard");
+
+                            return Redirect(!string.IsNullOrEmpty(returnUrl) ? returnUrl : "/Administrator/Dashboard");
                         }
                        
                     }
@@ -122,7 +125,6 @@ namespace AodSport.Areas.Administrator.Controllers
             }
             return View(model);
         }
-
         public ActionResult LogOut()
         {
             try

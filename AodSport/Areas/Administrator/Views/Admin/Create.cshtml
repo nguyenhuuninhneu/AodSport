@@ -1,0 +1,199 @@
+﻿@model Core.Models.Users
+@Styles.Render("~/Css/Form");
+@{
+    var lstGroupUser = ViewData["lstGroupUser"] as List<Core.Models.UserGroups>;
+    var lstQuyTrinh = ViewData["lstQuyTrinh"] as List<Core.Models.QuyTrinhXuatBan>;
+    var lstMenu = ViewData["lstMenu"] as List<Core.Models.Menu>;
+}
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title h4">Thêm mới người dùng</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        
+            @using (Ajax.BeginForm("Create", "Users", null,
+                new AjaxOptions
+                {
+                    HttpMethod = "POST",
+                    OnSuccess = "users.onAddSuccess"
+                },
+                new { @id = "basicForm", @class = "form-horizontal" }))
+            {
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Tên đăng nhập <span class="cred">(*)</span></span>
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(g => g.Username, new { @class = "form-control", required = string.Empty, data_parsley_type = "alphanum" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Email <span class="cred">(*)</span></span>
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(g => g.Email, new { @class = "form-control", data_parsley_type = "email" , required = string.Empty })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Tên đầy đủ <span class="cred">(*)</span></span> 
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(g => g.FullName, new { @class = "form-control", required = string.Empty })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">Ảnh đại diện</label>
+                                <div class="col-md-9">
+                                    @*@Html.HiddenFor(g => g.Photo)
+                    <a id="Browser" class="btn btn-primary btn-custom waves-effect waves-light m-b-5"><span class="glyphicon glyphicon-paperclip"></span> Ảnh đại diện</a>
+                    <div class="mt10" id="previewthumbnail"></div>*@
+
+                                    @*@Html.Partial("_AttachmentPhoto", new { Name = "Photo", Multiple = false, Type = "" })*@
+                                    @Html.Partial("~/Views/Shared/_JqueryUpload.cshtml", new { changeName = true, auto = true, Name = "AttachmentVz", Multiple = false, Value = "", type = "image", setname = "AttachmentNameVz", valueName = "", setSize = "SizeVz", valueSize = "" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Số điện thoại <span class="cred">(*)</span></span>
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(g => g.Phone, new { @class = "form-control", required = string.Empty })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Mật khẩu <span class="cred">(*)</span></span>
+                                </label>
+                                <div class="col-md-9">
+                                    @Html.PasswordFor(g => g.Password, new { @class = "form-control", required = string.Empty, data_parsley_maxlength = "56" })
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Nhập lại mật khẩu <span class="cred">(*)</span></span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="password" value="" class="form-control" required id="inputPass"/>
+                                </div>
+                            </div>
+                        </div>    
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Phân quyền tin</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <select name="Roles" class="multiselect multiselect-custom" multiple="multiple">
+                                        @if (lstQuyTrinh != null && lstQuyTrinh.Any())
+                                        {
+                                            foreach (var item in lstQuyTrinh)
+                                            {
+                                                <option value="@item.Id" title="@item.Name">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>   
+                        @*<div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Phân Quyền</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <select name="MenuID" class="multiselect multiselect-custom" multiple="multiple">
+                                        @if (lstMenu != null && lstMenu.Any())
+                                        {
+                                            foreach (var item in lstMenu)
+                                            {
+                                                <option value="@item.Id" title="@item.NameWithLevel">@item.NameWithLevel</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>*@   
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">
+                                    <span>Nhóm người dùng</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <select name="GroupIDStr" class="multiselect multiselect-custom" multiple>
+                                        <option value="0" title="">- Chọn nhóm người dùng -</option>
+                                        @if (lstGroupUser != null && lstGroupUser.Any())
+                                        {
+                                            foreach (var item in lstGroupUser)
+                                            {
+                                                <option value="@item.Id" title="@item.Name">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>   
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">Trạng thái</label>
+                                <div class="col-md-9">
+                                    <div class="fancy-checkbox">
+                                        <label><input type="checkbox" name="Status" id="Status" value="true"><span>Hoạt động</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">Quản trị tối cao</label>
+                                <div class="col-md-9">
+                                    <div class="fancy-checkbox">
+                                        <label><input type="checkbox" name="Administrator" id="Administrator" value="true"><span>Kích hoạt</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3 text-right">Tài khoản thống kê</label>
+                                <div class="col-md-9">
+                                    <div class="fancy-checkbox">
+                                        <label><input type="checkbox" name="IsThongKe" id="IsThongKe" value="true"><span>Kích hoạt</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="checkPass($(this));">Thêm mới</button>
+                    <button type="submit" class="dn" id="submitForm"></button>
+                    <button type="button" class="btn btn-danger"  data-dismiss="modal">Đóng</button>
+                </div>
+            }
+                
+    </div>
+</div>
+@Scripts.Render("~/Scripts/Form")
